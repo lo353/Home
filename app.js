@@ -14,7 +14,7 @@ let db;
 MongoClient.connect('mongodb+srv://admin:polpik11@kai2.sc90x.mongodb.net/webstore?retryWrites=true&w=majority'
 , (err, client) => {
 db = client.db('webstore')
-})
+}) 
 // get the collection name
 app.param('collectionName'
 , (req, res, next, collectionName) => {
