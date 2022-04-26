@@ -1,0 +1,204 @@
+<html>
+
+<head>
+    <title>School Club</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+   
+    
+
+    <script type="module">
+
+        var webstore = new Vue({ // root of the vue instance
+            el: '#app', // link to element in div tags
+            data: {
+                sitename: 'After school club',
+                showProduct: true,
+                product: "products",
+                defaultSort: "ascending",
+                cart: [], //cart array
+                isCartEmpty: true,
+                sortBy: "Location",
+                checkoutPage: true,
+                order: {
+                    firstName: '',
+                    lastName: '',                   
+                    phonenumber: '',
+                   
+                
+                }
+
+            },
+
+            methods: {
+
+                //shopping cart 
+
+                shoppingCart() {
+
+                    this.showCheckout();
+
+                },
+
+                addToCart: function (e) {
+                    let item = JSON.parse(e.target.value);
+
+                    if (item.availableSpaces == 1) {
+                        e.target.disabled = true;
+                    }
+
+                    item.availableSpaces = item.availableSpaces - 1;
+
+                    let allProducts = this.product.filter((element) => {
+                        return element.id === item.id;
+                    });
+
+                    this.product = [...allProducts, item];
+
+
+                    this.cart.push(item);
+                },
+
+                removeFromCart(e) {
+                    let currentItem = JSON.parse(e.target.value);
+                    let copyCart = [...this.cart];
+                    let newCart = copyCart.filter((element) => element.id !== currentItem.id);
+                    this.cart = newCart;
+                },
+
+                checkoutPageShow() {
+                    if (this.showProduct) {
+                        this.showProduct = false;
+                        this.checkoutPage = false;
+                    }
+                    else {
+                        this.showProduct = true;
+                        this.checkoutPage = true;
+                    }
+                },
+                showCheckout: function () {
+                    if (this.showProduct) {
+                        this.showProduct = false;
+                        this.checkoutPage = false;
+                    }
+                    else {
+                        this.showProduct = true;
+                        this.checkoutPage = true;
+
+
+                    }; // this will switch the values
+                },
+                async submitForm(e) {
+                    e.preventDefault();
+                    window.console.log('order is ',this.order);
+                    await fetch('https://kaiwork.herokuapp.com/collection/orders',{
+                        method:'post',
+                        headers:{
+                            'Accept':'application/json,text/plain,*/*',
+                            'Content-Type':'application/json'
+                        },
+                        body:JSON.stringify({order:this.order})
+                    }).then(res=>res.json()).then(res=>console.log('response back form API',res))
+                    alert("ORDER CONFIRMED");
+
+                },
+             
+
+            },
+
+            computed: { //computed property object
+                cartItemCount: function () {
+                    this.isCartEmpty = this.cart.length > 0 ? false : true;
+                    return this.cart.length || ''; // its value will be calculated when it called
+                },
+
+            },
+
+            async created() {
+                const response = await fetch("https://kaiwork.herokuapp.com/collection/lessons");
+                const data = await response.json();
+                console.log(data);
+                this.product = data;
+            }
+        });
+    </script>
+
+
+
+    <div id="app">
+        <header>
+            <h1 v-text="sitename"></h1>
+           
+            <br>
+            <br>
+
+            <button v-on:click='shoppingCart' :disabled="isCartEmpty">Shopping Cart {{cartItemCount}} </button>
+            <button v-on:click='checkoutPageShow' :disabled="checkoutPage"> Back </button>
+
+          
+
+        </header>
+        <div v-if='showProduct'>
+            <!--this is the product page-->
+
+            <div v-for="p in product" :key="p.id" style="float: left; padding: 35px;">
+                <h1 v-text="p.Topic"></h1>
+                <!--This section is for the subject english-->
+                <img v-bind:src="p.image" height="125px" width="125px"><br>
+               Price: <p v-text="p.Price"></p>
+                Location :<p v-text="p.Location"></p>
+                
+                <p>Spaces available:<p v-text="p.Space"></p></p>
+                <button v-on:click="addToCart" :value="JSON.stringify(p)"> Add to cart</button>
+            </div>
+
+        </div>
+
+        <div v-else>
+            <!--shows checkout page-->
+            <h2>Check Out</h2>
+
+            <div v-for="c in cart" :key="c.Topic" style="border: 1px solid #afafaf">
+                <h1 v-text="c.Topic"></h1>
+                <!--This section is for the subject english-->
+                <!-- <img v-bind:src="p.image" height="125px" width="125px"> -->
+                <p v-text="c.Location"></p>
+                <p>Price: £${{c.Price}} per hour</p>
+                <button v-on:click="removeFromCart" :value="JSON.stringify(c)"> Remove </button>
+            </div>
+
+
+            <br>
+            <br>
+            <div>
+
+                <form @submit="submitForm">
+                                        <p>
+                        <strong>First Name:</strong>
+                        <input v-model.trim='order.firstName' type="text" required>
+                    </p>
+                    <p>
+                        <strong>Last Name:</strong>
+                        <input v-model.trim='order.lastName'>
+                    </p>
+                        <p>
+                            <strong>Phone number</strong>
+                            <input v-model.trim='order.phonenumber' type="string" required>
+                        </p>
+                    <h2>Confirmation of Customer Details</h2>
+                    <p>First Name: {{order.firstName}}</p>
+                    <p>Last Name: {{order.lastName}}</p>
+                  <p>Phone Number: {{order.phonenumber}}</p>
+                   
+
+                    <button type="submit">Submit Your Order</button>
+                </form>
+                
+
+            </div>
+        </div>
+</body>
+
+</html>
