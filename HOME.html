@@ -121,38 +121,32 @@
            
             <br>
             <br>
-
+             <button v-on:click='checkoutPageShow' :disabled="checkoutPage"> Back </button>
             <button v-on:click='shoppingCart' :disabled="isCartEmpty">Shopping Cart {{cartItemCount}} </button>
-            <button v-on:click='checkoutPageShow' :disabled="checkoutPage"> Back </button>
+           
 
           
 
         </header>
-        <div v-if='showProduct'>
-            <!--this is the product page-->
+        <div v-if='showProduct'>            
 
             <div v-for="p in product" :key="p.id" style="float: left; padding: 35px;">
                 <h1 v-text="p.Topic"></h1>
-                <!--This section is for the subject english-->
+        
                 <img v-bind:src="p.image" height="125px" width="125px"><br>
                Price: <p v-text="p.Price"></p>
-                Location :<p v-text="p.Location"></p>
-                
+                Location :<p v-text="p.Location"></p>                
                 <p>Spaces available:<p v-text="p.Space"></p></p>
                 <button v-on:click="addToCart" :value="JSON.stringify(p)"> Add to cart</button>
             </div>
-
         </div>
 
         <div v-else>
-            <!--shows checkout page-->
-            <h2>Check Out</h2>
+                <h2>Check Out</h2>
 
             <div v-for="c in cart" :key="c.Topic" style="border: 1px solid #afafaf">
                 <h1 v-text="c.Topic"></h1>
-                <!--This section is for the subject english-->
-                <!-- <img v-bind:src="p.image" height="125px" width="125px"> -->
-                <p v-text="c.Location"></p>
+             <p v-text="c.Location"></p>
                 <p>Price: £${{c.Price}} per hour</p>
                 <button v-on:click="removeFromCart" :value="JSON.stringify(c)"> Remove </button>
             </div>
