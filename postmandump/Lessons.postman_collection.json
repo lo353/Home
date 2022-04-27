@@ -28,15 +28,19 @@
 		{
 			"name": "REST",
 			"request": {
-				"method": "GET",
+				"method": "PUT",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000",
+					"raw": "http://localhost:3000/collection/lessons",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000"
+					"port": "3000",
+					"path": [
+						"collection",
+						"lessons"
+					]
 				}
 			},
 			"response": []
@@ -81,10 +85,20 @@
 		{
 			"name": "remove lesson",
 			"request": {
-				"method": "GET",
+				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "http://localhost:3000/collection/lessons/625c8e1b6d430283343c6214",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"collection",
+						"lessons",
+						"625c8e1b6d430283343c6214"
+					]
 				}
 			},
 			"response": []

@@ -18,7 +18,7 @@
                 order: {
                     firstName: '',
                     lastName: '',                   
-                    phonenumber: '',                
+                    phonenumber: '',              
                 
                 }
                             },
@@ -88,6 +88,7 @@
                             'Content-Type':'application/json'
                         },
                         body:JSON.stringify({order:this.order})
+                        
                     }).then(res=>res.json()).then(res=>console.log('response back form API',res))
                     alert("ORDER CONFIRMED");
 
