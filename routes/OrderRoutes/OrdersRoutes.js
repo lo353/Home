@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-router.get("Orders", (req, res) => {
+router.get("orders", (req, res) => {
   req.client
     .db("webstore")
     .collection("orders")
@@ -10,7 +10,7 @@ router.get("Orders", (req, res) => {
       res.status(200).send(result);
     });
 });
-router.post("Orders", (req, res) => {
+router.post("orders", (req, res) => {
   console.log("request is ...", req.body);
   req.client
     .db("webstore")

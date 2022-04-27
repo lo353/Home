@@ -4,42 +4,28 @@
     <title>School Club</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
-
-<body>
-   
-    
-
+<body>     
     <script type="module">
-
         var webstore = new Vue({ // root of the vue instance
             el: '#app', // link to element in div tags
             data: {
                 sitename: 'After school club',
                 showProduct: true,
-                product: "products",
-                defaultSort: "ascending",
+                product: "products",             
                 cart: [], //cart array
-                isCartEmpty: true,
-                sortBy: "Location",
+                isCartEmpty: true,              
                 checkoutPage: true,
                 order: {
                     firstName: '',
                     lastName: '',                   
-                    phonenumber: '',
-                   
+                    phonenumber: '',                
                 
                 }
-
-            },
+                            },
 
             methods: {
-
-                //shopping cart 
-
                 shoppingCart() {
-
                     this.showCheckout();
-
                 },
 
                 addToCart: function (e) {
@@ -78,6 +64,9 @@
                         this.checkoutPage = true;
                     }
                 },
+                shoppingCart() {
+                    this.showCheckout();
+                },
                 showCheckout: function () {
                     if (this.showProduct) {
                         this.showProduct = false;
@@ -91,9 +80,8 @@
                     }; // this will switch the values
                 },
                 async submitForm(e) {
-                    e.preventDefault();
-                    window.console.log('order is ',this.order);
-                    await fetch('https://kaiwork.herokuapp.com/collection/orders',{
+                  
+                 fetch('http://localhost:3000/collection/orders',{
                         method:'post',
                         headers:{
                             'Accept':'application/json,text/plain,*/*',

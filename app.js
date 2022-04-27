@@ -4,7 +4,7 @@ const cors = require("cors");
 
 const ObjectId = require("mongodb").ObjectID;
 const bodyParser = require("body-parser");
-const RequestLogger = require("./Logs/Logger");
+
 require("dotenv").config({ path: ".env" });
 app.use(cors());
 ''
@@ -15,7 +15,7 @@ MongoClient.connect('mongodb+srv://admin:polpik11@kai2.sc90x.mongodb.net/webstor
 , (err, client) => {
 db = client.db('webstore')
 }) 
-// get the collection name
+// get the collection nam e
 app.param('collectionName'
 , (req, res, next, collectionName) => {
 req.collection = db.collection(collectionName)
@@ -23,10 +23,14 @@ req.collection = db.collection(collectionName)
 , req.collection)
 return next()
 })
-app.post('/collection/:collectionName',function(req,res){
-  
-  res.send("received post");
-});
+
+app.post('/collection/:collectionName'
+, (req, res, next) => {
+req.collection.insert(req.body, (e, results) => {
+if (e) return next(e)
+res.send(results.ops)
+})
+})
 
 
 
@@ -90,12 +94,7 @@ const client = new MongoClient(process.env.DATABASE, {
 });
 //Logs in console every request from client side
 //Request Logger is exported from Logs folder all detail is over there related to logs
-app.use(RequestLogger);
-client.connect((err, db) => {
-  if (err) console.log("Error While connection", err);
-  console.log("Connection Successfully");
- 
-});
+
 
 app.all("*", (request, response, next) => {
   request.client = client;
